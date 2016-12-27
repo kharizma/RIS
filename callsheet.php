@@ -106,6 +106,14 @@ class Callsheet extends CI_Controller {
 		$this->load->view('admin/callsheet/upload_bosnet',$data);
 		$this->load->view('admin/footer',$data);
 	}
+	public function output_pilih_ris_bosnet(){
+		$data['title']="PT. Surya Mustika Lampung";
+		$data['user']=$this->session->userdata('username');
+		$data['level']=$this->session->userdata('level');
+		$this->load->view('admin/header',$data);
+		$this->load->view('admin/callsheet/output_pilih_ris_bosnet',$data);
+		$this->load->view('admin/footer',$data);
+	}
 	public function tes_post(){
 		if(!empty($_POST))
 		{
@@ -1916,6 +1924,38 @@ class Callsheet extends CI_Controller {
 		}else{ 
 		redirect('callsheet','refresh'); 
 		}
+	}
+	public function lihat_output_bosnet(){
+		$tipe= $this->input->post('tipe');
+		if ($tipe != ""){
+			$data['title']="PT. Surya Mustika Lampung";
+			$data['user']=$this->session->userdata('username');
+			$data['level']=$this->session->userdata('level');
+			if($tipe=="5"){
+				redirect('callsheet/output_ris_bosnet','refresh');
+			} elseif($tipe=="8"){
+				redirect('callsheet/grafik_semi','refresh');
+			} elseif($tipe=="6"){
+				redirect('callsheet/grafik_so','refresh');
+			} elseif($tipe=="7"){
+				redirect('callsheet/grafik_sa','refresh');
+			}
+		} else{ redirect('callsheet/grafik','refresh'); }
+	}
+	public function output_ris_bosnet(){
+		$this->load->model("model_area_office",'',TRUE);
+		$data['ao']=$this->model_area_office->lihat();
+		$this->load->model("model_brand",'',TRUE);
+		$data['brand']=$this->model_brand->lihat();
+		$this->load->model("model_territory",'',TRUE);
+		$data['territory']=$this->model_territory->lihat();
+		$sub= $this->input->post('sub');
+		$this->load->model("model_sub_territory",'',TRUE);
+		$data['sub_territory']=$this->model_sub_territory->ubah($sub);
+		$data['title']="PT. Surya Mustika Lampung";
+		$data['user']=$this->session->userdata('username');
+		$data['level']=$this->session->userdata('level');
+		$this->load->view('admin/callsheet/output_ris_bosnet',$data);
 	}
 	public function lihat_grafik(){
 		$tipe= $this->input->post('tipe');
