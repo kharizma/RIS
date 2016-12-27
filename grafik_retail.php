@@ -123,7 +123,7 @@ function loadRute(){
 </head>
 <body>
 	<div id="container">
-		<h4>GRAFIK CALLSHEET
+		<h4>OUTPUT CALLSHEET
 			<small>PT. Surya Mustika Lampung</small>
 		</h4>
 		<section class="content">
