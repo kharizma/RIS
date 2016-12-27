@@ -21,10 +21,9 @@
 					<form enctype="multipart/form-data" role="form" action="<?php echo base_url();?>callsheet/proses_upload_bosnet" method="post">
           			<div class="box-body">
 							<div class="form-group">
-								<label>PILIH FILE UPLOAD BOSNET</label><br>
-                File Upload : <input type="file" name="fupload"><br/>Deskripsi File : <br/>
-                <textarea name="deskripsi" rows="8" cols="40"></textarea><br/>
-                <input type="submit" value="Upload">
+								<label>PILIH FILE UPLOAD BOSNET</label><br/>
+                File Upload <strong>(Save AS Excel 97-2003 -> Format .xls)</strong>:<input type="file" name="fupload"><br/>
+                <input type="submit" value="Upload" name="upload">
                 </form>
 							</div><!-- /.form-group -->
 						</div><!-- /.box-body -->
