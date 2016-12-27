@@ -246,7 +246,7 @@ function loadRute(){
 									<input type="hidden" class="form-control" name="jenis_outlet" id="jenis_outlet" size="25" value="<?php echo $this->uri->segment(2);?>">
 									<td><label><b>PILIH WEEK</b></label></td>
 									<td><select id="brand" name="brand"  class="form-control" style="width:250px" required>
-										<option class='form-control' value=''>[Pilih WEEK]</option>
+										<option class='form-control' value=''>[Pilih Week]</option>
 										<?php
 										if(isset($_POST['cari'])){
 											foreach ($brand->result() as $p) {
@@ -308,8 +308,10 @@ function loadRute(){
 				</div><!-- /col -->
 			</div><!-- /.row -->
 		</section><br>
-
 				<div class="box-body">
+			<center>
+				<font style="font-size: 15px"><strong>DATA TERRITORY</strong></font>
+			</center>
 <!------------------------------------- Tabel Pertama -------------------------------->
 					<table  border="1" style="border: 1px solid #D0D0D0;" width="100%">
 						<thead>
@@ -323,13 +325,14 @@ function loadRute(){
 								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>BPJ</b></font></td>
 								<td width="3%" bgcolor="#000000" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>PERFORMANCE</b></font></td>
 								<td width="3%" bgcolor="#de7815" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>VOLUME</b></font></td>
-								<td colspan="3" bgcolor="#de7815" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>CHANNEL CONTRIBUTION</b></font></td>
+								<td colspan="4" bgcolor="#de7815" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>CHANNEL CONTRIBUTION</b></font></td>
 								<td width="3%" bgcolor="#000000" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>GROWTH</b></font></td>
 							</tr>
 							<tr align="center" bgcolor="#de7815">
 								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>WS</b></font></td>
 								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>SWS</b></font></td>
 								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>RETAIL</b></font></td>
+								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>SO</b></font></td>
 							</tr>
 							<tr align="center" bgcolor="#de7815">
 								
