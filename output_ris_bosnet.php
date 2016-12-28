@@ -111,7 +111,7 @@ function loadWeek(){
 </head>
 <body>
 	<div id="container">
-		<h4>OUTPUT RIS & BOSNET
+		<h4>PERFORMANCE & GROWTH
 			<small>PT. Surya Mustika Lampung</small>
 		</h4>
 		<section class="content">
@@ -336,21 +336,7 @@ function loadWeek(){
 								$tahun		=$_POST['tahun'];
 								$brand		=$_POST['brand'];
 								$jenis		=$_POST['jenis_outlet'];
-								if($brand<=0){
-									if($tahun<='2015'){
-										$sql1=$this->db->query("SELECT week(tgl_callsheet,1) as week FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d where year(a.tgl_callsheet)='".$tahun."' and b.id_rute = a.id_rute and c.id_tipe_distrik = d.id_tipe_distrik and d.jenis_outlet LIKE '%RETAIL%' and b.id_distrik = c.id_distrik and c.id_sub_territory = '".$sub."' group by week(a.tgl_callsheet,1)");
-									} else{
-										$sql1=$this->db->query("SELECT week(tgl_callsheet,1)+1 as week FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d where year(a.tgl_callsheet)='".$tahun."' and b.id_rute = a.id_rute and c.id_tipe_distrik = d.id_tipe_distrik and d.jenis_outlet LIKE '%RETAIL%' and b.id_distrik = c.id_distrik and c.id_sub_territory = '".$sub."' group by week(a.tgl_callsheet,1)");
-									}
-								} else {
-									if($tahun<='2015'){
-										$sql1=$this->db->query("SELECT week(tgl_callsheet,1) as week FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_callsheet_detil d, tabel_tipe_distrik f where c.id_tipe_distrik = f.id_tipe_distrik and f.jenis_outlet LIKE '%RETAIL%' and d.id_brand='".$brand."'
-										and year(tgl_callsheet)='".$tahun."' and b.id_rute = a.id_rute and b.id_distrik = c.id_distrik and c.id_sub_territory = '".$sub."' group by week(tgl_callsheet,1)");
-									} else{
-										$sql1=$this->db->query("SELECT week(tgl_callsheet,1)+1 as week FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_callsheet_detil d, tabel_tipe_distrik f where c.id_tipe_distrik = f.id_tipe_distrik and f.jenis_outlet LIKE '%RETAIL%' and d.id_brand='".$brand."'
-										and year(tgl_callsheet)='".$tahun."' and b.id_rute = a.id_rute and b.id_distrik = c.id_distrik and c.id_sub_territory = '".$sub."' group by week(tgl_callsheet,1)");
-									}
-								}?>
+								?>
 								<?php if ($tahun>='2016') {?>
 								<tr>
 										<td align="center" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
