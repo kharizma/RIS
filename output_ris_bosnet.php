@@ -29,30 +29,18 @@ function loadSubTerritory(){
 			}
 		});
 	}
-function loadDistrik(){
-	    var sub= $("#sub").val();
-	    $.ajax({
-	        type:'GET',
-	        url:"<?php echo base_url(); ?>outlet/distrik",
-	        data:"id=" + sub,
-	        success: function(html)
-	        {
-	            $("#distrik").html(html);
-	        }
-    });
-}
-function loadRute(){
-	    var distrik= $("#distrik").val();
-	    $.ajax({
-	        type:'GET',
-	        url:"<?php echo base_url(); ?>outlet/rute",
-	        data:"id=" + distrik,
-	        success: function(html)
-	        {
-	            $("#rute").html(html);
-	        }
-    });
-}
+function loadWeek(){
+		var thn = $("#thn").val();
+		$.ajax({
+			type:'GET',
+			url:"<?php echo base_url(); ?>outlet/week",
+			data:"id=" + thn,
+			success: function(html)
+			{
+				$("#week").html(html);
+			}
+		});
+	}
 </script>
 <style type="text/css">
 	body {
@@ -187,7 +175,8 @@ function loadRute(){
 										?>
 									</select>
 									</td>
-								</tr><!--
+								</tr>
+								<!--
 								<tr height="40">
 									<td><label>DISTRIK</label></td>
 									<td><select id="distrik" onchange="loadRute()" name="distrik" class="form-control" style="width:250px">
@@ -225,41 +214,39 @@ function loadRute(){
 										?>
 									</select>
 									</td>
-								</tr>-->
-								<tr height="40">
-									<td><label><b>PILIH TAHUN</b></label><br></td>
-									<td><select  name="tahun"  class="form-control" style="width:250px" required>
+								</tr>--><tr height="40">
+									<td><label>TAHUN</label></td>
+									<td><select id="thn" name="thn" class="form-control" onchange="loadWeek()" style="width:250px" required>
+										<option selected="selected" class="form-control" value=''>[Pilih Tahun]</option>
 										<?php
-										if(isset($_POST['cari'])){
-											$tahun=$_POST['tahun'];
-											echo "<option selected class='form-control' value='$tahun'>$tahun</option>";
-										} else{
-											echo "<option selected class='form-control' value=''>[Pilih Tahun]</option>";
+										$sql51=$this->db->query("SELECT DISTINCT(YEAR(tgl_callsheet)) AS THN FROM tabel_callsheet WHERE STATUS = 'closed' AND YEAR(tgl_callsheet) LIKE '20%'");
+										foreach($sql51->result_array() as $tahun){
+											echo "<option class='form-control' value='".$tahun['THN']."'>".$tahun['THN']."</option>";
 										}
 										?>
-										<option class="form-control" value="2015">2015</option>
-										<option class="form-control" value="2016">2016</option>
-									</select>
+										</select>
 									</td>
 								</tr>
-								<tr height="40">
-									<input type="hidden" class="form-control" name="jenis_outlet" id="jenis_outlet" size="25" value="<?php echo $this->uri->segment(2);?>">
+								<!--<tr height="40">
 									<td><label><b>PILIH WEEK</b></label></td>
-									<td><select id="brand" name="brand"  class="form-control" style="width:250px" required>
+									<td><select id="week" name="week"  class="form-control" style="width:250px" required>
 										<option class='form-control' value=''>[Pilih Week]</option>
 										<?php
-										if(isset($_POST['cari'])){
-											foreach ($brand->result() as $p) {
-												if ($p->id_brand == mysql_real_escape_string($_POST['brand'])){
-													echo "<option selected='selected' class='form-control' value='$p->id_brand'>$p->nama_brand</option>";
-												} else{
-													echo "<option class='form-control' value='$p->id_brand'>$p->nama_brand</option>";
-												}
-											}
-										} else{
-											foreach ($brand->result() as $p) {
-												echo "<option class='form-control' value='$p->id_brand'>$p->nama_brand</option>";
-											}
+											$sql52=$this->db->query("SELECT week(tgl_callsheet,1)+1 as week FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_callsheet_detil d, tabel_tipe_distrik f where c.id_tipe_distrik = f.id_tipe_distrik and f.jenis_outlet LIKE '%RETAIL%' and year(tgl_callsheet)='".$tahun['THN']."' and b.id_rute = a.id_rute and b.id_distrik = c.id_distrik and c.id_sub_territory = '".$hasil1['id_sub_territory']."' group by week(tgl_callsheet,1)");
+										foreach($sql52->result_array() as $week){
+											echo "<option class='form-control' value='".$week['week']."'>".$week['week']."</option>";
+										}
+										?>
+									</select>
+									</td>
+								</tr>-->
+								<tr height="40">
+									<td><label><b>PILIH WEEK</b></label></td>
+									<td><select id="week" name="week"  class="form-control" style="width:250px" required>
+										<option class='form-control' value=''>[Pilih Week]</option>
+										<?php
+										for($i=1;$i<=53;$i++){
+											echo "<option class='form-control' value='".$i."'>Week ".$i."</option>";
 										}
 										?>
 									</select>
@@ -365,7 +352,7 @@ function loadRute(){
 									}
 								}?>
 								<?php if ($tahun>='2016') {?>
-								<!--<tr>
+								<tr>
 										<td align="center" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php echo '1';?>
 										</td>
@@ -390,7 +377,7 @@ function loadRute(){
 											?>
 										</td>
 										// TK (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+										<!--<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 											echo number_format((float)(( $total_tk['total']/$total_to['total'])*100), 2, '.', '');
 											?> %
@@ -551,6 +538,46 @@ function loadRute(){
 								foreach($notasi->result_array() as $tl){echo number_format((float)(($tl['notasi']/$total_to['total'])*100), 2, '.', '');}
 											?> %
 										</td>
+										-->
+										// AVB
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+											if($brand<=0){
+												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
+											}else{
+												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
+											}
+										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
+											?>
+										</td>
+										// EC
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+											if($brand<=0){
+												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
+											}else{
+												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
+											}
+										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
+											?>
+										</td>
+										// REPEAT
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+											if($brand<=0){
+												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
+											}else{
+												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
+											}
+										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
+											?>
+										</td>
 										// BPJ
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
@@ -565,7 +592,7 @@ function loadRute(){
 											?>
 										</td>
 										// BPJ (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+										<!--<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 											if($brand<=0){
 												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
@@ -576,7 +603,7 @@ function loadRute(){
 											}
 										foreach($notasi->result_array() as $bpj){echo number_format((float)(($bpj['notasi']/$total_to['total'])*100), 2, '.', '');}
 											?> %
-										</td>
+										</td>-->
 
 								</tr> -->
 									<?php } ?>
