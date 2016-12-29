@@ -242,7 +242,7 @@ function loadWeek(){
 								</tr>-->
 								<tr height="40">
 									<td><label><b>PILIH WEEK</b></label></td>
-									<td><select id="week" name="week"  class="form-control" style="width:250px" required>
+									<td><select name="week"  class="form-control" style="width:250px" required>
 										<option class='form-control' value=''>[Pilih Week]</option>
 										<?php
 										for($i=1;$i<=53;$i++){
@@ -291,7 +291,7 @@ function loadWeek(){
 						</form>
 
 					</div>
-			<hr style="border-bottom:1px solid #D0D0D0;">
+					<hr style="border-bottom:1px solid #D0D0D0;">
 				</div><!-- /col -->
 			</div><!-- /.row -->
 		</section><br>
@@ -309,13 +309,15 @@ function loadWeek(){
 								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>AVB</b></font></td>
 								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>EC</b></font></td>
 								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>REPEAT</b></font></td>
-								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>BPJ</b></font></td>
+								<td colspan="2" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:black"><b>BPJ</b></font></td>
 								<td width="3%" bgcolor="#000000" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>PERFORMANCE</b></font></td>
 								<td width="3%" bgcolor="#de7815" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>VOLUME</b></font></td>
 								<td colspan="4" bgcolor="#de7815" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>CHANNEL CONTRIBUTION</b></font></td>
 								<td width="3%" bgcolor="#000000" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>GROWTH</b></font></td>
 							</tr>
 							<tr align="center" bgcolor="#de7815">
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>QTY</b></font></td>
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>QTY (%)</b></font></td>
 								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>WS</b></font></td>
 								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>SWS</b></font></td>
 								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>RETAIL</b></font></td>
@@ -333,722 +335,326 @@ function loadWeek(){
 								$sub		=$_POST['sub'];
 								$distrik	=$_POST['distrik'];
 								$rute		=$_POST['rute'];
-								$tahun		=$_POST['tahun'];
+								$tahun		=$_POST['thn'];
 								$brand		=$_POST['brand'];
 								$jenis		=$_POST['jenis_outlet'];
-								?>
+								$week 		=$_POST['week'];
+							?>
 								<?php if ($tahun>='2016') {?>
-								<tr>
-										<td align="center" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php echo '1';?>
-										</td>
-										// TO
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											$total_to=$this->db->query("SELECT COUNT(d.id_outlet) AS total FROM
-														   tabel_sub_territory a, tabel_distrik b, tabel_rute c, tabel_outlet d, tabel_tipe_distrik e
-														   where a.id_sub_territory=b.id_sub_territory and b.id_distrik=c.id_distrik and c.id_rute=d.id_rute
-														  and b.id_tipe_distrik=e.id_tipe_distrik and a.id_sub_territory = '".$sub."'
-														   and e.jenis_outlet like '%RETAIL%' ");
-											foreach($total_to->result_array() as $total_to){echo $total_to['total'];}
-											?>
-										</td>
-										// TK
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d where year(a.tgl_callsheet)='".$tahun."'
-											and week(a.tgl_callsheet,1)+1='0' and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed'");
-
-											foreach($total_tk->result_array() as $total_tk){echo $total_tk['total'];}
-											?>
-										</td>
-										// TK (%)
-										<!--<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											echo number_format((float)(( $total_tk['total']/$total_to['total'])*100), 2, '.', '');
-											?> %
-										</td>
-										// SK
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sk) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sk) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-											foreach($notasi->result_array() as $sk){echo number_format($sk['notasi']);}
-										?>
-										</td>
-										// SK (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sk) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sk) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $sk){echo number_format((float)(($sk['notasi']/$total_to['total'])*100), 2, '.', '');}
-										?> %
-										</td>
-										// SL
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $sl){echo number_format($sl['notasi']);}
-											?>
-										</td>
-										// SL (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $sl){echo number_format((float)(($sl['notasi']/$total_to['total'])*100), 2, '.', '');}
-											?> %
-										</td>
-										// SD
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sd) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sd) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $sd){echo number_format($sd['notasi']);}
-											?>
-										</td>
-										// SD (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sd) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sd) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $sd){echo number_format((float)(($sd['notasi']/$total_to['total'])*100), 2, '.', '');}
-											?> %
-										</td>
-										// OOS
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.oos) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.oos) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $oos){echo number_format($oos['notasi']);}
-											?>
-										</td>
-										// OOS (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.oos) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.oos) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-								foreach($notasi->result_array() as $oos){echo number_format((float)(($oos['notasi']/$total_to['total'])*100), 2, '.', '');}
-											?> %
-										</td>
-										// SB
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sb) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sb) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $sb){echo number_format($sb['notasi']);}
-											?>
-										</td>
-										// SB (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.sb) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.sb) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $sb){echo number_format((float)(($sb['notasi']/$total_to['total'])*100), 2, '.', '');}
-											?> %
-										</td>
-										// TL
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.tl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.tl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $tl){echo number_format($tl['notasi']);}
-											?>
-										</td>
-										// TL (%)
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.tl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.tl) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-								foreach($notasi->result_array() as $tl){echo number_format((float)(($tl['notasi']/$total_to['total'])*100), 2, '.', '');}
-											?> %
-										</td>
-										-->
-										// AVB
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
-											?>
-										</td>
-										// EC
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
-											?>
-										</td>
-										// REPEAT
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
-											?>
-										</td>
-										// BPJ
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
-											?>
-										</td>
-										// BPJ (%)
-										<!--<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}else{
-												$notasi=$this->db->query("SELECT SUM(a.bpj) as notasi  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)='0' and a.id_brand='".$brand."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = '".$sub."' and c.status='Closed'");
-											}
-										foreach($notasi->result_array() as $bpj){echo number_format((float)(($bpj['notasi']/$total_to['total'])*100), 2, '.', '');}
-											?> %
-										</td>-->
-
-								</tr> -->
-									<?php } ?>
-									<!-- akhir week 1 -->
-
-
 								<?php
-
-								foreach($sql1->result_array() as $week){
-									?>
-									<tr>
-										<td align="center" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php echo $week['week'];?>
+										$brand=$this->db->query("SELECT id_brand, singkatan_brand FROM tabel_brand");
+										foreach ($brand->result_array() as $brand) 
+										{
+								?>
+								<tr>
+										
+										<td align="center" bgcolor="black" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0; color: white">
+											<?php
+												# code...
+												echo $brand['singkatan_brand'];
+												?><br/>
 										</td>
 										<!--TO-->
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
-											if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total FROM tabel_callsheet a, tabel_rute b where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_rute = '".$rute."' and a.status='Closed'");
-											}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_distrik = '".$distrik."' and a.status='Closed'");
-											}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$sub."' and a.status='Closed'");
-											}elseif(($ao<>'')and($to<>'')){
-											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d, tabel_territory e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
+											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d, tabel_territory e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and
 											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_territory=e.id_territory and e.id_territory = '".$to."' and a.status='Closed'");
-											}else{
-											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d, tabel_territory e, tabel_area_office f where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_territory=e.id_territory and e.id_ao=f.id_ao and f.id_ao = '".$ao."' and a.status='Closed' ");
-											}
 											foreach($total_to->result_array() as $total_to){echo $total_to['total'];}
 											?>
 										</td>
 										<!--TK-->
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
-											if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_rute = '".$rute."' and a.status='Closed' ");
-											}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_distrik = '".$distrik."' and a.status='Closed' ");
-											}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$sub."' and a.status='Closed' ");
-											}elseif(($ao<>'')and($to<>'')){
-											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d, tabel_territory e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_territory=e.id_territory and e.id_territory = '".$to."' and a.status='Closed' ");
-											}else{
-											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d, tabel_territory e, tabel_area_office f where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_territory=e.id_territory and e.id_ao=f.id_ao and f.id_ao = '".$ao."' and a.status='Closed' ");
-											}
+											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total_kunjungan FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d, tabel_territory e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and
+											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_territory=e.id_territory and e.id_territory = '".$to."' and a.status='Closed'");
 
-											foreach($total_tk->result_array() as $total_tk){echo $total_tk['total'];}
+											foreach($total_tk->result_array() as $total_tk){echo $total_tk['total_kunjungan'];}
 											?>
 										</td>
-										<!--TK (%)-->
+										<!--AVB	-->
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
-											echo number_format((float)(( $total_tk['total']/$total_to['total'])*100), 2, '.', '');
-											?> %
-										</td>
-										<!--SK-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
+												$notasi=$this->db->query("SELECT SUM(e.sk) AS sk, SUM(e.sl) as sl, SUM(e.sd) as sd, SUM(e.oos) as oos, SUM(e.sb) as sb FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where c.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand['id_brand']."'");
+											foreach($notasi->result_array() as $not)
+												{ 
+													$sk=number_format($not['sk']);
+													$sd=number_format($not['sd']);
+													$sl=number_format($not['sl']);
+													$oos=number_format($not['oos']);
+													$sb=number_format($not['sb']);
+
+													$a = $sk+$sl+$sd+$oos+$sb;
+													$avb = $a;
+													echo number_format($avb);
 												}
-											}else{
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sk) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}
-											}
-										foreach($notasi->result_array() as $sk){echo number_format($sk['notasi']);}
 										?>
 										</td>
-										<!--SK (%)-->
+										<!--EC	-->
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
-											echo number_format((float)(($sk['notasi']/$total_to['total'])*100), 2, '.', '');
-											?> %
-										</td>
-										<!--SL-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
+												$notasi=$this->db->query("SELECT SUM(e.sk) AS sk, SUM(e.sl) as sl, SUM(e.sd) as sd, SUM(e.oos) as oos, SUM(e.sb) as sb FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where c.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand['id_brand']."'");
+											foreach($notasi->result_array() as $not2)
+												{ 
+													$sk=number_format($not2['sk']);
+													$oos=number_format($not2['oos']);
+													$sb=number_format($not2['sb']);
+
+													$a 	 = $sk+$oos+$sb;
+													$ec  = $a;
+													echo number_format($ec);
 												}
-											}else{
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}
-											}
-										foreach($notasi->result_array() as $sl){echo number_format($sl['notasi']);}
 										?>
 										</td>
-										<!--SL (%)-->
+										<!--REPEAT-->
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
-											echo number_format((float)(($sl['notasi']/$total_to['total'])*100), 2, '.', '');
-											?> %
-										</td>
-										<!--SD-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-										<?php
-											if($brand<=0){
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
+												$notasi=$this->db->query("SELECT SUM(e.sk) AS sk, SUM(e.sl) as sl, SUM(e.sd) as sd, SUM(e.oos) as oos, SUM(e.sb) as sb FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where c.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand['id_brand']."'");
+											foreach($notasi->result_array() as $not3)
+												{ 
+													$sk=number_format($not3['sk']);
+													$sl=number_format($not3['sl']);
+													$oos=number_format($not3['oos']);
+
+													$a 	 	= $sk+$sl+$oos;
+													$repeat	= $a;
+													echo number_format($repeat);
 												}
-											}else{
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sd) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}
-											}
-										foreach($notasi->result_array() as $sd){echo number_format($sd['notasi']);}
 										?>
-										</td>
-										<!--SD (%)-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											echo number_format((float)(($sd['notasi']/$total_to['total'])*100), 2, '.', '');
-											?> %
-										</td>
-										<!--OOS-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-										<?php
-											if($brand<=0){
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}
-											}else{
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.oos) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}
-											}
-										foreach($notasi->result_array() as $oos){echo number_format($oos['notasi']);}
-										?>
-										</td>
-										<!--OOS (%)-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											echo number_format((float)(($oos['notasi']/$total_to['total'])*100), 2, '.', '');
-											?> %
-										</td>
-										<!--SB-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-										<?php
-											if($brand<=0){
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}
-											}else{
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.sb) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}
-											}
-										foreach($notasi->result_array() as $sb){echo number_format($sb['notasi']);}
-										?>
-										</td>
-										<!--SB (%)-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											echo number_format((float)(($sb['notasi']/$total_to['total'])*100), 2, '.', '');
-											?> %
-										</td>
-										<!--TL-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											if($brand<=0){
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}
-											}else{
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.tl) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}
-											}
-										foreach($notasi->result_array() as $tl){echo number_format($tl['notasi']);}
-										?>
-										</td>
-										<!--TL (%)-->
-										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
-											<?php
-											echo number_format((float)(($tl['notasi']/$total_to['total'])*100), 2, '.', '');
-											?> %
 										</td>
 										<!--BPJ-->
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
-											if($brand<=0){
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet");
+												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb, SUM(a.bpj) AS bpj  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f, tabel_sub_territory g
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory = g.id_sub_territory and g.id_territory = '".$to."' and c.status='Closed'");
+											foreach($notasi->result_array() as $not4)
+												{ 
+													echo number_format($not4['bpj']);
 												}
-											}else{
-												if(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')and($rute<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND b.id_rute = '".$rute."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')and($distrik<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_distrik = '".$distrik."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')and($sub<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND c.id_sub_territory = '".$sub."' and a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}elseif(($ao<>'')and($to<>'')){
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where d.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}else{
-												$notasi=$this->db->query("SELECT SUM(e.bpj) AS notasi FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f, tabel_territory g where f.id_territory=g.id_territory and d.id_sub_territory=f.id_sub_territory and g.id_ao='".$ao."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week['week']."'
-												and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand."'");
-												}
-											}
-										foreach($notasi->result_array() as $bpj){echo number_format($bpj['notasi']);}
 										?>
 										</td>
 										<!--BPJ (%)-->
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
-											echo number_format((float)(($bpj['notasi']/$total_to['total'])*100), 2, '.', '');
+												$notasi=$this->db->query("SELECT SUM(e.sk) AS sk, SUM(e.sl) as sl, SUM(e.sd) as sd, SUM(e.oos) as oos, SUM(e.sb) as sb, SUM(e.bpj) as bpj FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_tipe_distrik d, tabel_callsheet_detil e, tabel_sub_territory f where c.id_sub_territory=f.id_sub_territory and f.id_territory='".$to."' and year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and a.id_rute=b.id_rute and b.id_distrik = c.id_distrik and c.id_tipe_distrik=d.id_tipe_distrik and d.jenis_outlet like '%retail%' AND a.status='Closed' and a.id_callsheet=e.id_callsheet and e.id_brand = '".$brand['id_brand']."'");
+											foreach($notasi->result_array() as $not5)
+												{ 
+													echo number_format((float)(($not5['bpj']/$total_to['total'])*100), 2, '.', '');
+												}
 											?> %
 										</td>
-
+										<td bgcolor="black">
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td bgcolor="black">
+											
+										</td>
 									</tr>
-									<script type="text/javascript" src="<?php echo base_url();?>asset/jquery-1.7.2.min.js"></script>
-									<script type="text/javascript" src="<?php echo base_url();?>asset/highcharts/highcharts.js"></script>
-									<script type="text/javascript" src="<?php echo base_url();?>asset/highcharts/modules/exporting.js"></script>
-									<script type="text/javascript" src="<?php echo base_url();?>asset/highcharts/themes/dark-green.js"></script>
-									<?php }?>
-									<?php }?>
-								</tbody>
-						</table>
+									<?php }} }?>
+									<!-- akhir week 1 -->
+							</tbody>
+					</table>
+			<br><br>
+			<center>
+				<font style="font-size: 15px"><strong>DATA SUB TERRITORY</strong></font>
+			</center>
+<!------------------------------------- Tabel Kedua -------------------------------->
+					<table  border="1" style="border: 1px solid #D0D0D0;" width="100%">
+						<thead>
+							<tr align="center" >
+								<td width="3%" bgcolor="#000000" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>BRAND</b></font></td>
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>TO</b></font></td>
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>TK</b></font></td>
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>AVB</b></font></td>
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>EC</b></font></td>
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>REPEAT</b></font></td>
+								<td colspan="2" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:black"><b>BPJ</b></font></td>
+								<td width="3%" bgcolor="#000000" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>PERFORMANCE</b></font></td>
+								<td width="3%" bgcolor="#de7815" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>VOLUME</b></font></td>
+								<td colspan="4" bgcolor="#de7815" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>CHANNEL CONTRIBUTION</b></font></td>
+								<td width="3%" bgcolor="#000000" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:white;"><b>GROWTH</b></font></td>
+							</tr>
+							<tr align="center" bgcolor="#de7815">
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>QTY</b></font></td>
+								<td width="3%" bgcolor="#EAFF00" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;" rowspan="2"><font style="color:black;"><b>QTY (%)</b></font></td>
+								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>WS</b></font></td>
+								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>SWS</b></font></td>
+								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>RETAIL</b></font></td>
+								<td width="3%" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;"><font style="color:white;"><b>SO</b></font></td>
+							</tr>
+							<tr align="center" bgcolor="#de7815">
+								
+							</tr>
+
+						</thead>
+						<tbody>
+							<?php if(isset($_POST['cari'])){
+								$ao			=$_POST['ao'];
+								$to			=$_POST['to'];
+								$sub		=$_POST['sub'];
+								$distrik	=$_POST['distrik'];
+								$rute		=$_POST['rute'];
+								$tahun		=$_POST['thn'];
+								$brand		=$_POST['brand'];
+								$jenis		=$_POST['jenis_outlet'];
+								$week 		=$_POST['week'];
+							?>
+								<?php if ($tahun>='2016') {?>
+								<?php
+										$brand=$this->db->query("SELECT id_brand, singkatan_brand FROM tabel_brand");
+										foreach ($brand->result_array() as $brand) 
+										{
+								?>
+								<tr>
+										
+										<td align="center" bgcolor="black" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0; color: white">
+											<?php
+												# code...
+												echo $brand['singkatan_brand'];
+												?><br/>
+										</td>
+										<!--TO-->
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total, SUM(A.total_kunjungan) as total_kunjungan FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and
+											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$sub."' and a.status='Closed'");
+											foreach($total_to->result_array() as $total_to){echo $total_to['total'];}
+											?>
+										</td>
+										<!--TK-->
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and
+											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$sub."' and a.status='Closed'");
+
+											foreach($total_tk->result_array() as $total_tk){echo $total_tk['total'];}
+											?>
+										</td>
+										<!--AVB	-->
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+											foreach($notasi->result_array() as $not)
+												{ 
+													$sk=number_format($not['sk']);
+													$sd=number_format($not['sd']);
+													$sl=number_format($not['sl']);
+													$oos=number_format($not['oos']);
+													$sb=number_format($not['sb']);
+
+													$a = $sk+$sl+$sd+$oos+$sb;
+													$avb = $a;
+													echo number_format($avb);
+												}
+										?>
+										</td>
+										<!--EC	-->
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+											foreach($notasi->result_array() as $not2)
+												{ 
+													$sk=number_format($not2['sk']);
+													$oos=number_format($not2['oos']);
+													$sb=number_format($not2['sb']);
+
+													$a 	 = $sk+$oos+$sb;
+													$ec  = $a;
+													echo number_format($ec);
+												}
+										?>
+										</td>
+										<!--REPEAT-->
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+											foreach($notasi->result_array() as $not3)
+												{ 
+													$sk=number_format($not3['sk']);
+													$sl=number_format($not3['sl']);
+													$oos=number_format($not3['oos']);
+
+													$a 	 	= $sk+$sl+$oos;
+													$repeat	= $a;
+													echo number_format($repeat);
+												}
+										?>
+										</td>
+										<!--BPJ-->
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb, SUM(a.bpj) AS bpj  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+											foreach($notasi->result_array() as $not4)
+												{ 
+													echo number_format($not4['bpj']);
+												}
+										?>
+										</td>
+										<!--BPJ (%)-->
+										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
+											<?php
+												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb, SUM(a.bpj) AS bpj  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+											foreach($notasi->result_array() as $not5)
+												{ 
+													echo number_format((float)(($not5['bpj']/$total_to['total'])*100), 2, '.', '');
+												}
+											?> %
+										</td>
+										<td bgcolor="black">
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td>
+											
+										</td>
+										<td bgcolor="black">
+											
+										</td>
+									</tr>
+									<?php }} }?>
+									<!-- akhir week 1 -->
+							</tbody>
+					</table>
 						<br>
-							</table>
-		</div><!-- /.box-body -->
-					</div>
-					<!-- end tabel !-->
-					<!--<div id="container" <?php if(!isset($_POST['cari'])){ echo "style='display:none;'"; } ?> >
-
-
-						<div style="width:auto;">
-							<div id="chart1"></div>
-						</div>
-
-
-						<div style="width:auto;">
-							<div id="chart2" ></div>
-						</div>
-
-
-						<div style="width:auto;">
-							<div id="chart3" ></div>
-						</div>
-
-
-						<div style="width:auto;">
-							<div id="chart4" ></div>
-						</div>
-
-
-						<div style="width:auto;">
-							<div id="chart5" ></div>
-						</div>
-
-
-						<div style="width:auto;">
-							<div id="chart6"></div>
-						</div>
-
-						<div style="width:auto;">
-							<div id="chart7"></div>
-						</div>
-
-						<div style="width:auto;">
-							<div id="chart8"></div>
-						</div>
-
-						<div style="width:auto;">
-							<div id="chart9"></div>
-						</div>-->
+					
+				</div><!-- /.box-body -->
+					
 						<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
 					</div>
-					<?php if(isset($_POST['cari'])){ if($_POST['brand'] <> ""){ include "retail_wbrand.php"; }
-					else { include "retail_nbrand.php"; } } ?>
+					
 
-					<script src="<?php echo base_url();?>asset/plugins/select2/select2.full.min.js"></script>
-					<script src="//code.jquery.com/jquery-1.10.2.js"></script>
-					<!-- DataTables -->
-				</body>
-				</html>
+		<script src="<?php echo base_url();?>asset/plugins/select2/select2.full.min.js"></script>
+		<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+	<!-- DataTables -->
+	</body>
+</html>
