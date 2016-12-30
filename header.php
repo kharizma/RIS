@@ -419,7 +419,7 @@ function loadKelurahan()
                                 </a>
                                 <ul class="treeview-menu">
                                     <li><a href="<?php echo base_url();?>callsheet/output_ris_bosnet"><i class="fa fa-file-text-o"></i>PERFORMANCE & GROWTH</a></li>
-                                    <li><a href="<?php echo base_url();?>callsheet/output_ris_bosnet"><i class="fa fa-file-text-o"></i>WEEKLY SALES</a></li>
+                                    <li><a href="<?php echo base_url();?>callsheet/weekly_sales"><i class="fa fa-file-text-o"></i>WEEKLY SALES</a></li>
                                 </ul>
                             </li>
                         </ul>

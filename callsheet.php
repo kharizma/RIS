@@ -114,6 +114,14 @@ class Callsheet extends CI_Controller {
 		$this->load->view('admin/callsheet/output_pilih_ris_bosnet',$data);
 		$this->load->view('admin/footer',$data);
 	}
+	public function weekly_sales(){
+		$data['title']="PT. Surya Mustika Lampung";
+		$data['user']=$this->session->userdata('username');
+		$data['level']=$this->session->userdata('level');
+		$this->load->view('admin/header',$data);
+		$this->load->view('admin/callsheet/weekly_sales',$data);
+		$this->load->view('admin/footer',$data);
+	}
 	public function tes_post(){
 		if(!empty($_POST))
 		{
