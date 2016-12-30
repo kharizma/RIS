@@ -27,28 +27,28 @@ for($i=2;$i<=$baris;$i++)
 	//membaca data (kolom 4)
 	$   = $data->val($i,4);
 	//membaca data (kolom 5)
-	$   = $data->val($i,5);
+	$   = $data->val($i,5);	
+	//membaca data (kolom 6)
+	$   = $data->val($i,6);
+	//membaca data (kolom 7)
+	$   = $data->val($i,7);
+	//membaca data (kolom 8)
+	$   = $data->val($i,8);
+	//membaca data (kolom 9)
+	$   = $data->val($i,9);
+	//membaca data (kolom 10)
+	$   = $data->val($i,10);
+		//membaca data (kolom 11)
+	$   = $data->val($i,11);
+	//membaca data (kolom 12)
+	$   = $data->val($i,12);
 
-	$cekdata="select *from where";
-	$ada=mysqli_query($cekdata) or die(mysqli_error());
-	if(mysqli_num_rows($ada)>0)
-	{
-		?>
-		<script type="text/javascript">
-			alert("Data Sudah Ada !!!");
-			window.location="";
-		</script>
-		<?php
-	}
-	else
-	{
-		$query 	= "INSERT INTO VALUES()";
+		$query 	= "INSERT INTO bosnet VALUES()";
 		$hasil	= mysqli_query($query);
 
 		//menambah counter jika berhasil atau gagal
 		if($hasil) $sukses++;
 		else $gagal++;
-	}
 }
 echo "<center>";
 //tampilkan report hasil import
@@ -56,6 +56,6 @@ echo "<h3>HASIL PROSES UPLOAD DATA BOSNET</h3>";
 echo "<p>Jumlah data sukses di-upload</p>".$sukses."<br/>";
 echo "Jumlah data gagal di-upload".$gagal."<br/>";
 echo "<br/><br/>";
-echo "<a href='<?php base_url();?>callsheet/'>Lanjutkan</a>";
+echo "<a href='<?php base_url();?>callsheet/weekly_sales'>Lanjutkan</a>";
 echo "</center>";
 ?>
