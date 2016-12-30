@@ -159,7 +159,7 @@ function loadWeek(){
 								</tr>
 								<tr height="40">
 									<td><label>SUB TERITORY</label></td>
-									<td><select id="sub" name="sub"  onchange="loadDistrik()" class="form-control" style="width:250px" required>
+									<td><select id="sub" name="sub"  onchange="loadDistrik()" class="form-control" style="width:250px">
 										<?php
 										if(isset($_POST['cari'])){
 											$cek1 = mysql_query("SELECT * FROM tabel_sub_territory where id_sub_territory='".$_POST['sub']."'");
@@ -176,45 +176,7 @@ function loadWeek(){
 									</select>
 									</td>
 								</tr>
-								<!--
 								<tr height="40">
-									<td><label>DISTRIK</label></td>
-									<td><select id="distrik" onchange="loadRute()" name="distrik" class="form-control" style="width:250px">
-										<?php
-										if(isset($_POST['cari'])){
-											$cek2 = mysql_query("SELECT * FROM tabel_distrik where id_distrik='".$_POST['distrik']."'");
-											$hasil2 = mysql_fetch_array($cek2);
-											if($hasil2['id_distrik']<>''){
-											echo "<option class='form-control' value=".$hasil2['id_distrik'].">".$hasil2['nama_distrik']."</option>";
-											} else {
-												echo "<option selected class='form-control' value=''>[Pilih Distrik]</option>";
-											}
-										} else{
-											echo "<option selected class='form-control' value=''>[Pilih Distrik]</option>";
-										}
-										?>
-									</select>
-									</td>
-								</tr>
-								<tr height="40">
-									<td><label>RUTE</label></td>
-									<td><select id="rute" name="rute" class="form-control" style="width:250px">
-										<?php
-										if(isset($_POST['cari'])){
-											$cek3 = mysql_query("SELECT * FROM tabel_rute where id_rute='".$_POST['rute']."'");
-											$hasil3 = mysql_fetch_array($cek3);
-											if($hasil3['id_rute']<>''){
-											echo "<option class='form-control' value=".$hasil3['id_rute'].">".$hasil3['nama_rute']."</option>";
-											} else{
-											echo "<option selected class='form-control' value=''>[Pilih Rute]</option>";
-											}
-										} else{
-											echo "<option selected class='form-control' value=''>[Pilih Rute]</option>";
-										}
-										?>
-									</select>
-									</td>
-								</tr>--><tr height="40">
 									<td><label>TAHUN</label></td>
 									<td><select id="thn" name="thn" class="form-control" onchange="loadWeek()" style="width:250px" required>
 										<option selected="selected" class="form-control" value=''>[Pilih Tahun]</option>
@@ -227,19 +189,6 @@ function loadWeek(){
 										</select>
 									</td>
 								</tr>
-								<!--<tr height="40">
-									<td><label><b>PILIH WEEK</b></label></td>
-									<td><select id="week" name="week"  class="form-control" style="width:250px" required>
-										<option class='form-control' value=''>[Pilih Week]</option>
-										<?php
-											$sql52=$this->db->query("SELECT week(tgl_callsheet,1)+1 as week FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_callsheet_detil d, tabel_tipe_distrik f where c.id_tipe_distrik = f.id_tipe_distrik and f.jenis_outlet LIKE '%RETAIL%' and year(tgl_callsheet)='".$tahun['THN']."' and b.id_rute = a.id_rute and b.id_distrik = c.id_distrik and c.id_sub_territory = '".$hasil1['id_sub_territory']."' group by week(tgl_callsheet,1)");
-										foreach($sql52->result_array() as $week){
-											echo "<option class='form-control' value='".$week['week']."'>".$week['week']."</option>";
-										}
-										?>
-									</select>
-									</td>
-								</tr>-->
 								<tr height="40">
 									<td><label><b>PILIH WEEK</b></label></td>
 									<td><select name="week"  class="form-control" style="width:250px" required>
@@ -278,9 +227,10 @@ function loadWeek(){
 										$sub		= $_POST['sub'];
 										$distrik	= $_POST['distrik'];
 										$rute		= $_POST['rute'];
-										$tahun		= $_POST['tahun'];
+										$tahun		= $_POST['thn'];
 										$jenis		= $_POST['jenis_outlet'];
 										$brand		= $_POST['brand'];
+										$week		= $_POST['week'];
 										?>
 										&nbsp;&nbsp;&nbsp; <a href="<?php echo base_url();?>callsheet/download?ao=<?php echo $ao;?>&to=<?php echo $to;?>&sub=<?php echo $sub;?>&distrik=<?php echo $distrik;?>&rute=<?php echo $rute;?>&tahun=<?php echo $tahun;?>&jenis=<?php echo $jenis;?>&brand=<?php echo $brand;?>" target="_blank" class="btn btn-primary">
 										<i class="fa fa-home"></i> &nbsp; <b>DOWNLOAD<b></a>
@@ -296,9 +246,67 @@ function loadWeek(){
 			</div><!-- /.row -->
 		</section><br>
 				<div class="box-body">
-			<center>
-				<font style="font-size: 15px"><strong>DATA TERRITORY</strong></font>
-			</center>
+				<?php if (isset($_POST['cari'])) {
+					# code...
+				 ?>
+					<table>
+					<?php if($ao<>""){ 
+					$sql_ao	= $this->db->query("SELECT nama_ao FROM tabel_area_office WHERE id_ao='$ao'");
+					foreach($sql_ao->result_array() as $hasil_ao);
+					?> 
+					<tr>
+						<td width="120px"><b>AREA OFFICE</b></td>
+						<td width="5px">:</td>
+						<td><?php echo $hasil_ao['nama_ao'];?></td>
+					</tr>
+					<?php } ?>
+					<?php if($to<>""){ 
+					$sql_to	= $this->db->query("SELECT nama_territory FROM tabel_territory WHERE id_territory='$to'");
+					foreach($sql_to->result_array() as $hasil_to);
+					?>
+					<tr>
+						<td><b>TERRITORY</b></td>
+						<td>:</td>
+						<td><?php echo $hasil_to['nama_territory'];?></td>
+					</tr>
+					<?php } ?>
+					<?php if($sub<>""){ 
+					$sql_sub= $this->db->query("SELECT nama_sub_territory FROM tabel_sub_territory WHERE id_sub_territory='$sub'");
+					foreach($sql_sub->result_array() as $hasil_sub);
+					?>
+					<tr>
+						<td><b>SUB TERRITORY</b></td>
+						<td>:</td>
+						<td><?php echo $hasil_sub['nama_sub_territory'];?></td>
+					</tr>
+					<?php } ?>
+					<?php if($tahun<>""){ ?>
+					<tr>
+						<td><b>TAHUN</b></td>
+						<td>:</td>
+						<td><?php echo $tahun;?></td>
+					</tr>
+					<?php } ?>
+					<?php if($week<>""){ ?>
+					<tr>
+						<td><b>WEEK</b></td>
+						<td>:</td>
+						<td><?php echo $week;?></td>
+					</tr>
+					<?php } }?>
+					</table>
+			<?php 
+			if($sub=="")
+			{?>
+			<table align="center">
+				<tr>
+					<td><font style="font-size: 15px"><strong>DATA TERRITORY <?php echo $hasil_to['nama_territory'] ;?></strong></font></td>
+				</tr>
+				<tr>
+					<td><br/></td>
+				</tr>
+			</table>
+				
 <!------------------------------------- Tabel Pertama -------------------------------->
 					<table  border="1" style="border: 1px solid #D0D0D0;" width="100%">
 						<thead>
@@ -468,9 +476,19 @@ function loadWeek(){
 									<!-- akhir week 1 -->
 							</tbody>
 					</table>
+					<?php } ?>
 			<br><br>
+			<?php
+				if($sub==""){
+					$bagi_sto=$this->db->query("SELECT id_sub_territory as idSTO, nama_sub_territory as namaSTO FROM tabel_sub_territory WHERE id_territory = '".$to."'");
+				}else{
+					$bagi_sto=$this->db->query("SELECT id_sub_territory as idSTO, nama_sub_territory as namaSTO FROM tabel_sub_territory WHERE id_sub_territory = '".$sub."'");
+				}
+				foreach ($bagi_sto->result_array() as $bagiSTO) {
+			?>
 			<center>
-				<font style="font-size: 15px"><strong>DATA SUB TERRITORY</strong></font>
+				<font style="font-size: 15px"><strong>DATA SUB TERRITORY <?php echo $bagiSTO['namaSTO'] ;?></strong></font>
+				<br/>
 			</center>
 <!------------------------------------- Tabel Kedua -------------------------------->
 					<table  border="1" style="border: 1px solid #D0D0D0;" width="100%">
@@ -531,7 +549,7 @@ function loadWeek(){
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 											$total_to=$this->db->query("SELECT SUM(a.total_outlet) AS total, SUM(A.total_kunjungan) as total_kunjungan FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$sub."' and a.status='Closed'");
+											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$bagiSTO['idSTO']."' and a.status='Closed'");
 											foreach($total_to->result_array() as $total_to){echo $total_to['total'];}
 											?>
 										</td>
@@ -539,7 +557,7 @@ function loadWeek(){
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 											$total_tk=$this->db->query("SELECT SUM(a.total_kunjungan) AS total FROM tabel_callsheet a, tabel_rute b, tabel_distrik c, tabel_sub_territory d where year(a.tgl_callsheet)='".$tahun."' and week(a.tgl_callsheet,1)+1='".$week."' and
-											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$sub."' and a.status='Closed'");
+											a.id_rute=b.id_rute and b.id_distrik=c.id_distrik and c.id_sub_territory=d.id_sub_territory and d.id_sub_territory = '".$bagiSTO['idSTO']."' and a.status='Closed'");
 
 											foreach($total_tk->result_array() as $total_tk){echo $total_tk['total'];}
 											?>
@@ -548,7 +566,7 @@ function loadWeek(){
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$bagiSTO['idSTO']."' and c.status='Closed'");
 											foreach($notasi->result_array() as $not)
 												{ 
 													$sk=number_format($not['sk']);
@@ -567,7 +585,7 @@ function loadWeek(){
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$bagiSTO['idSTO']."' and c.status='Closed'");
 											foreach($notasi->result_array() as $not2)
 												{ 
 													$sk=number_format($not2['sk']);
@@ -584,7 +602,7 @@ function loadWeek(){
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$bagiSTO['idSTO']."' and c.status='Closed'");
 											foreach($notasi->result_array() as $not3)
 												{ 
 													$sk=number_format($not3['sk']);
@@ -601,7 +619,7 @@ function loadWeek(){
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb, SUM(a.bpj) AS bpj  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$bagiSTO['idSTO']."' and c.status='Closed'");
 											foreach($notasi->result_array() as $not4)
 												{ 
 													echo number_format($not4['bpj']);
@@ -612,7 +630,7 @@ function loadWeek(){
 										<td align="right" style="padding: 2px 5px 2px 5px;border: 1px solid #D0D0D0;">
 											<?php
 												$notasi=$this->db->query("SELECT SUM(a.sk) as sk, SUM(a.sl) as sl, SUM(a.sd) as sd, SUM(a.oos) as oos, SUM(a.sb) as sb, SUM(a.bpj) AS bpj  FROM tabel_callsheet_detil a, tabel_callsheet c, tabel_rute d, tabel_distrik e, tabel_tipe_distrik f
-													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$sub."' and c.status='Closed'");
+													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$bagiSTO['idSTO']."' and c.status='Closed'");
 											foreach($notasi->result_array() as $not5)
 												{ 
 													echo number_format((float)(($not5['bpj']/$total_to['total'])*100), 2, '.', '');
@@ -646,7 +664,7 @@ function loadWeek(){
 							</tbody>
 					</table>
 						<br>
-					
+					<?php }?>
 				</div><!-- /.box-body -->
 					
 						<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
