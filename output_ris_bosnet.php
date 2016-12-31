@@ -393,7 +393,12 @@ function loadWeek(){
 
 													$a = $sk+$sl+$sd+$oos+$sb;
 													$avb = $a;
+													if($avb<>"0")
+													{
 													echo number_format($avb);
+													}else{
+														echo "";
+													}
 												}
 										?>
 										</td>
@@ -577,7 +582,12 @@ function loadWeek(){
 
 													$a = $sk+$sl+$sd+$oos+$sb;
 													$avb = $a;
+													if($avb<>"0")
+													{
 													echo number_format($avb);
+													}else{
+														echo "";
+													}
 												}
 										?>
 										</td>
@@ -594,7 +604,12 @@ function loadWeek(){
 
 													$a 	 = $sk+$oos+$sb;
 													$ec  = $a;
+													if($ec<>"0")
+													{
 													echo number_format($ec);
+													}else{
+														echo "";
+													}
 												}
 										?>
 										</td>
@@ -611,7 +626,12 @@ function loadWeek(){
 
 													$a 	 	= $sk+$sl+$oos;
 													$repeat	= $a;
+													if($repeat<>"0")
+													{
 													echo number_format($repeat);
+													}else{
+														echo "";
+													}
 												}
 										?>
 										</td>
@@ -622,7 +642,12 @@ function loadWeek(){
 													where a.id_callsheet=c.id_callsheet and year(c.tgl_callsheet)='".$tahun."' and week(c.tgl_callsheet,1)+1='".$week."' and a.id_brand='".$brand['id_brand']."' and c.id_rute=d.id_rute and d.id_distrik = e.id_distrik and e.id_tipe_distrik=f.id_tipe_distrik and f.jenis_outlet like '%retail%' AND e.id_sub_territory ='".$bagiSTO['idSTO']."' and c.status='Closed'");
 											foreach($notasi->result_array() as $not4)
 												{ 
+													if($not4['bpj']<>"0")
+													{
 													echo number_format($not4['bpj']);
+													}else{
+														echo "";
+													}
 												}
 										?>
 										</td>
